@@ -13,13 +13,13 @@ public class DriverProfile {
     private Long id;
 
     @Column(name = "full_name")
-    private String full_name;
+    private String fullName;
 
     @Column(name = "phone")
     private String phone;
 
-    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id", unique = true, nullable = false)
+    @OneToOne(fetch = FetchType.LAZY)  //cascade = CascadeType.ALL,
+    @JoinColumn(name = "user_id", unique = true, nullable = false) //
     private User user;
 
 
@@ -34,12 +34,12 @@ public class DriverProfile {
         this.id = id;
     }
 
-    public String getFull_name() {
-        return full_name;
+    public String getFullName() {
+        return fullName;
     }
 
-    public void setFull_name(String full_name) {
-        this.full_name = full_name;
+    public void setFullName(String full_name) {
+        this.fullName = full_name;
     }
 
     public String getPhone() {
@@ -65,7 +65,7 @@ public class DriverProfile {
         if (o == null || getClass() != o.getClass()) return false;
         DriverProfile that = (DriverProfile) o;
         return Objects.equals(id, that.id) &&
-                Objects.equals(full_name, that.full_name) &&
+                Objects.equals(fullName, that.fullName) &&
                 Objects.equals(phone, that.phone) &&
                 Objects.equals(user, that.user);
     }
@@ -73,7 +73,7 @@ public class DriverProfile {
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, full_name, phone);
+        return Objects.hash(id, fullName, phone);
     }
 
 
@@ -81,7 +81,7 @@ public class DriverProfile {
     public String toString() {
         return "DriverProfile{" +
                 "id=" + id +
-                ", full_name='" + full_name + '\'' +
+                ", fullName='" + fullName + '\'' +
                 ", phone='" + phone + '\'' +
                 '}';
     }

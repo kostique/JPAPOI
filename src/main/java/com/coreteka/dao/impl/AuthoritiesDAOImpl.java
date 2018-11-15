@@ -11,16 +11,25 @@ import java.util.List;
 public class AuthoritiesDAOImpl implements AuthoritiesDAO {
 
     @Override
-    public void add(Authorities authorities) {
+    public Authorities create(Authorities authorities) {
         EntityManager entityManager = PersistenceUtil.getEntityManager();
         entityManager.getTransaction().begin();
-        entityManager.merge(authorities);
+        Authorities createdAuthorities = entityManager.merge(authorities);
         entityManager.getTransaction().commit();
         entityManager.close();
+        return createdAuthorities;
     }
 
     @Override
-    public List<Authorities> getAll() {
+    public Authorities getByName(String name) {
+        EntityManager entityManager = PersistenceUtil.getEntityManager();
+        Authorities authorities = entityManager.find(Authorities.class, name);
+        entityManager.close();
+        return authorities;
+    }
+
+    @Override
+    public List<Authorities> getAuthoritiesList() {
         EntityManager entityManager = PersistenceUtil.getEntityManager();
         entityManager.getTransaction().begin();
         TypedQuery<Authorities> query = entityManager.createQuery("Select a FROM Authorities a", Authorities.class);
@@ -31,39 +40,22 @@ public class AuthoritiesDAOImpl implements AuthoritiesDAO {
     }
 
     @Override
-    public Authorities getById(long id) {
-        EntityManager entityManager = PersistenceUtil.getEntityManager();
-        Authorities authorities = entityManager.find(Authorities.class, id);
-        entityManager.close();
-        return authorities;
-    }
-
-    @Override
-    public void update(long id, String name) {
+    public void update(String name) {
         EntityManager entityManager = PersistenceUtil.getEntityManager();
         entityManager.getTransaction().begin();
-        Authorities authorities = entityManager.find(Authorities.class, id);
+        Authorities authorities = entityManager.find(Authorities.class, name);
         authorities.setName(name);
         entityManager.getTransaction().commit();
         entityManager.close();
     }
 
-
     @Override
-    public void remove(long id) {
+    public void remove(String name) {
         EntityManager entityManager = PersistenceUtil.getEntityManager();
         entityManager.getTransaction().begin();
-        Authorities authorities = entityManager.find(Authorities.class, id);
+        Authorities authorities = entityManager.find(Authorities.class, name);
         entityManager.remove(authorities);
         entityManager.getTransaction().commit();
         entityManager.close();
-    }
-
-    @Override
-    public Authorities getByName(String name) {
-        EntityManager entityManager = PersistenceUtil.getEntityManager();
-        Authorities authorities = entityManager.find(Authorities.class, name);
-        entityManager.close();
-        return authorities;
     }
 }

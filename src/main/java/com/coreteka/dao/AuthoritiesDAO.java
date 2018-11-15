@@ -7,18 +7,17 @@ import java.util.List;
 public interface AuthoritiesDAO {
 
     //create
-    void add(Authorities authorities);
+    Authorities create(Authorities authorities);
 
     //read
-    List<Authorities> getAll();
-
-    Authorities getById(long id);
-
-    //update
-    void update(long id, String name);
-
-    //delete
-    void remove(long id);
+    List<Authorities> getAuthoritiesList();
 
     Authorities getByName(String name);
+
+    //update
+    void update(String name);
+
+    //delete
+    void remove(String name);
+
 }

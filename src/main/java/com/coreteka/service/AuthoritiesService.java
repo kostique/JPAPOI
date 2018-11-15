@@ -6,17 +6,14 @@ import java.util.List;
 
 public interface AuthoritiesService {
 
-    void createAuthorities(Authorities authorities);
+    Authorities create(Authorities authorities);
 
-    Authorities getAuthoritiesById(long id);
+    Authorities getByName(String name);
 
     List<Authorities> getAuthoritiesList();
 
-    void updateAuthorities(long id, String name);
+    void update(String name);
 
-    void updateAuthorities(Authorities authorities);
+    void delete(String name);
 
-    void deleteAuthorities(long id);
-
-    Authorities getById(String name);
 }

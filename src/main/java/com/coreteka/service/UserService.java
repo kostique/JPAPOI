@@ -2,20 +2,20 @@ package com.coreteka.service;
 
 import com.coreteka.entities.User;
 
+import javax.persistence.EntityManager;
+import java.io.IOException;
 import java.util.List;
 
 public interface UserService {
 
-    void createUser(User user);
+    User create(User user, EntityManager entityManager);
 
-    User getUserById(long id);
+    User getById(long id);
 
-    List<User> getUserList();
+    List<User> getUsers();
 
-    void updateUser(User user);
+    void update(User user);
 
     void deleteUser(long id);
-
-    void parseUser(String path);
 
 }

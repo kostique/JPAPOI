@@ -12,24 +12,20 @@ import java.util.Set;
         @GeneratedValue(strategy = GenerationType.IDENTITY)
         private Long id;
 
-        @Column(name = "username")
+        @Column(name = "username", unique = true)
         private String username;
 
         @Column(name = "password")
         private String password;
 
-
-        @OneToOne(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+        @OneToOne(mappedBy = "user", fetch = FetchType.LAZY)
         private DriverProfile driverProfile;
 
         @Column (name = "user_status")
-        private boolean user_status;
+        private boolean userStatus;
 
 
-        @ManyToMany(cascade = {
-                CascadeType.PERSIST,
-                CascadeType.MERGE
-        })
+        @ManyToMany(cascade = CascadeType.ALL)
         @JoinTable(
                 name = "user_authorities",
                 joinColumns = @JoinColumn(name = "user_id", nullable = false),
@@ -80,12 +76,12 @@ import java.util.Set;
             this.authorities = authorities;
         }
 
-        public boolean isUser_status() {
-            return user_status;
+        public boolean isUserStatus() {
+            return userStatus;
         }
 
-        public void setUser_status(boolean user_status) {
-            this.user_status = user_status;
+        public void setUserStatus(boolean userStatus) {
+            this.userStatus = userStatus;
         }
 
         @Override
@@ -100,7 +96,7 @@ import java.util.Set;
 
         @Override
         public int hashCode() {
-            return Objects.hash(id, username, password);
+            return Objects.hash(username, password);
         }
 
         @Override
@@ -109,7 +105,7 @@ import java.util.Set;
                     "id=" + id +
                     ", username='" + username + '\'' +
                     ", driverProfile=" + driverProfile +
-                    ", user_status=" + user_status +
+                    ", user_status=" + userStatus +
                     '}';
         }
     }

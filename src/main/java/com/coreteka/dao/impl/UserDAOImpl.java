@@ -10,12 +10,9 @@ import java.util.List;
 
 public class UserDAOImpl implements UserDAO {
     @Override
-    public void add(User user) {
-        EntityManager entityManager = PersistenceUtil.getEntityManager();
-        entityManager.getTransaction().begin();
-        entityManager.merge(user);
-        entityManager.getTransaction().commit();
-        entityManager.close();
+    public User create(User user, EntityManager entityManager) {
+        User createdUser = entityManager.merge(user);
+        return createdUser;
     }
 
     @Override

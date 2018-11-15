@@ -2,12 +2,13 @@ package com.coreteka.dao;
 
 import com.coreteka.entities.User;
 
+import javax.persistence.EntityManager;
 import java.util.List;
 
 public interface UserDAO {
 
     //create
-    void add(User user);
+    User create(User user, EntityManager entityManager);
 
     //read
     List<User> getAll();

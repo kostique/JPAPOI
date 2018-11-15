@@ -8,6 +8,7 @@ public class PersistenceUtil {
 
     private static EntityManagerFactory emFactory = null;
 
+
     public static EntityManager getEntityManager() {
         return getEntityManagerFactory().createEntityManager();
     }
