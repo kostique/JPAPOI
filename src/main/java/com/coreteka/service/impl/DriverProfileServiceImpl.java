@@ -9,8 +9,10 @@ import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import javax.persistence.EntityManager;
 import java.io.File;
 import java.io.IOException;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
 public class DriverProfileServiceImpl extends EntityService implements DriverProfileService {
 
@@ -31,7 +33,7 @@ public class DriverProfileServiceImpl extends EntityService implements DriverPro
             entityManager.close();
             return createdDriverProfile;
         }
-        //If entityManager was passed as parameter so it will be closed within invoking method
+        //If entityManager was passed as parameter it will be closed within the invoking method
         entityManager.getTransaction().begin();
 
         User createdUser = userDAO.create(driverProfile.getUser(), entityManager);
@@ -42,20 +44,41 @@ public class DriverProfileServiceImpl extends EntityService implements DriverPro
     }
 
     @Override
-    public void create(List<DriverProfile> driverProfiles, EntityManager entityManager){
-        DriverProfileDAO driverProfileDAO = new DriverProfileDAOImpl();
-        UserService userService = new UserServiceImpl();
-        Iterator<DriverProfile> iterator = driverProfiles.iterator();
+    public void create(List<DriverProfile> driverProfiles, EntityManager entityManager) {
+        if (entityManager == null) {
+            entityManager = getEntityManager();
+            entityManager.getTransaction().begin();
 
-        if ()
+            iterateList(driverProfiles, entityManager);
 
-        while (iterator.hasNext()){
-            DriverProfile driverProfile = iterator.next();
-            User user = driverProfile.getUser();
-            User createdUser = userService.create(user, getEntityManager());
-            driverProfile.setUser(createdUser);
-            driverProfileDAO.create(driverProfile, entityManager);
+            entityManager.getTransaction().commit();
+            entityManager.close();
         }
+        iterateList(driverProfiles, entityManager);
+    }
+
+    @Override
+    public List<DriverProfile> create(File file, EntityManager entityManager) throws IOException, InvalidFormatException {
+        ExcelParserService excelParserService = new ExcelParserServiceImpl();
+
+        List<DriverProfile> driverProfiles = excelParserService.parse(file);
+
+        if (entityManager == null) {
+            entityManager = getEntityManager();
+            entityManager.getTransaction().begin();
+
+            create(driverProfiles, entityManager);
+
+            entityManager.getTransaction().commit();
+            entityManager.close();
+
+            return driverProfiles;
+        }
+        entityManager.getTransaction().begin();
+
+        create(driverProfiles, entityManager);
+
+        return driverProfiles;
     }
 
     @Override
@@ -92,17 +115,26 @@ public class DriverProfileServiceImpl extends EntityService implements DriverPro
         return driverProfileDAO.update(existingDriverProfile, getEntityManager());
     }
 
-    @Override
-    public List<DriverProfile> create(File file) throws IOException, InvalidFormatException {
-        ExcelParserService excelParserService = new ExcelParserServiceImpl();
+    public void iterateList(List<DriverProfile> driverProfiles, EntityManager entityManager) {
+        AuthoritiesService authoritiesService = new AuthoritiesServiceImpl();
+        DriverProfileDAO driverProfileDAO = new DriverProfileDAOImpl();
+        UserService userService = new UserServiceImpl();
+        Iterator<DriverProfile> iterator = driverProfiles.iterator();
 
+        while (iterator.hasNext()) {
+            DriverProfile driverProfile = iterator.next();
 
-        List<DriverProfile> driverProfiles = excelParserService.parse(file);
-        create(driverProfiles, getEntityManager());
+            Authorities authority = authoritiesService.getByName("ROLE_DRIVER", null);
+            Set<Authorities> authoritiesSet = new HashSet<>();
+            authoritiesSet.add(authority);
 
+            User user = driverProfile.getUser();
+            user.setAuthorities(authoritiesSet);
+            User createdUser = userService.create(user, entityManager);
 
-
-        return driverProfiles;
+            driverProfile.setUser(createdUser);
+            driverProfileDAO.create(driverProfile, entityManager);
+        }
     }
 }
 

@@ -1,5 +1,7 @@
 package com.coreteka.entities;
 
+import org.hibernate.validator.constraints.NotEmpty;
+
 import javax.persistence.*;
 import java.util.Objects;
 import java.util.Set;
@@ -29,8 +31,9 @@ import java.util.Set;
         @JoinTable(
                 name = "user_authorities",
                 joinColumns = @JoinColumn(name = "user_id", nullable = false),
-                inverseJoinColumns = @JoinColumn(name = "auth_name", nullable = false)
+                inverseJoinColumns = @JoinColumn(name = "auth_name")
         )
+        @NotEmpty
         private Set<Authorities> authorities;
 
         public User() {

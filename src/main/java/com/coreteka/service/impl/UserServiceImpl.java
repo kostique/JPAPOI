@@ -3,6 +3,7 @@ package com.coreteka.service.impl;
 import com.coreteka.dao.UserDAO;
 import com.coreteka.dao.impl.UserDAOImpl;
 import com.coreteka.entities.User;
+import com.coreteka.service.EntityService;
 import com.coreteka.service.UserService;
 import javax.persistence.EntityManager;
 import java.util.List;
