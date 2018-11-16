@@ -15,6 +15,8 @@ public interface UserDAO {
 
     User getById(long id);
 
+    User getByUserName(String username, EntityManager entityManager);
+
     //update
     void update(User user);
 

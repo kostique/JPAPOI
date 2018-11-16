@@ -18,7 +18,7 @@ public interface DriverProfileService {
 
         List<DriverProfile> getDriverProfiles();
 
-        DriverProfile update(DriverProfile driverProfile);
+        DriverProfile update(DriverProfile driverProfile, EntityManager entityManager);
 
         List<DriverProfile> create(File file, EntityManager entityManager) throws IOException, InvalidFormatException;
 }

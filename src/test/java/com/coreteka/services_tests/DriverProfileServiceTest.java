@@ -9,9 +9,6 @@ import com.coreteka.service.impl.AuthoritiesServiceImpl;
 import com.coreteka.service.impl.DriverProfileServiceImpl;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.junit.Test;
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.Persistence;
 import java.io.File;
 import java.io.IOException;
 import java.util.HashSet;
@@ -112,10 +109,10 @@ public class DriverProfileServiceTest {
 
     @Test
     public void getDriverProfileById() {
-        long driverProfileId = 16L;
+        long driverProfileId = 26L;
         DriverProfileService driverProfileService = new DriverProfileServiceImpl();
         DriverProfile driverProfile = driverProfileService.getById(driverProfileId);
-        assertThat(driverProfile.getId(), equalTo(16L));
+        assertThat(driverProfile.getId(), equalTo(26L));
     }
 
     @Test
@@ -128,49 +125,27 @@ public class DriverProfileServiceTest {
 
     @Test
     public void updateDriverProfile() {
-        User user = new User();
-        user.setId(9L);
-
-        DriverProfile driverProfile = new DriverProfile();
-        driverProfile.setFullName("Lee GuanDong");
-        driverProfile.setPhone("+874625487458");
-        driverProfile.setUser(user);
-        driverProfile.setId(16L);
-
-        DriverProfileService driverProfileService = new DriverProfileServiceImpl();
-        driverProfile = driverProfileService.update(driverProfile);
-        assertThat(driverProfile.getId(), equalTo(16L));
-    }
-
-
-
-
-    @Test
-    public void nameDima() {
-        EntityManagerFactory emFactory = Persistence.createEntityManagerFactory("NewPersistenceUnit");
-        EntityManager em = emFactory.createEntityManager();
-        em.getTransaction().begin();
-
-        Authorities authority = em.find(Authorities.class, "ROLE_DRIVER");
-
+        Authorities authority = new Authorities();
+        authority.setName("ROLE_DRIVER");
         Set<Authorities> authoritiesSet = new HashSet<>();
         authoritiesSet.add(authority);
 
         User user = new User();
-        user.setUsername("username");
-        user.setPassword("password");
-        user.setAuthorities(authoritiesSet);
+        user.setUsername("Bortic");
         user.setUserStatus(true);
+        user.setAuthorities(authoritiesSet);
 
-        user = em.merge(user);
+        String newDriverProfileFullName = "FUHRER";
+        String newDriverProfilePhone = "105";
 
         DriverProfile driverProfile = new DriverProfile();
-        driverProfile.setPhone("phone");
-        driverProfile.setFullName("fullName");
+        driverProfile.setFullName(newDriverProfileFullName);
+        driverProfile.setPhone(newDriverProfilePhone);
         driverProfile.setUser(user);
-        em.merge(driverProfile);
-        em.getTransaction().commit();
-        em.close();
-        emFactory.close();
+
+        DriverProfileService driverProfileService = new DriverProfileServiceImpl();
+        driverProfile = driverProfileService.update(driverProfile, null);
+        assertThat(driverProfile.getFullName(), equalTo(newDriverProfileFullName));
+        assertThat(driverProfile.getPhone(), equalTo(newDriverProfilePhone));
     }
 }

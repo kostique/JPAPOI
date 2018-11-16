@@ -31,6 +31,23 @@ public class UserServiceImpl extends EntityService implements UserService {
     }
 
     @Override
+    public User getByUsername(String username, EntityManager entityManager){
+        UserDAO userDAO = new UserDAOImpl();
+
+        if (entityManager == null) {
+            entityManager = getEntityManager();
+            entityManager.getTransaction().begin();
+            User user = userDAO.getByUserName(username, entityManager);
+            entityManager.getTransaction().commit();
+            entityManager.close();
+            return user;
+        }
+
+        User user = userDAO.getByUserName(username, entityManager);
+        return user;
+    }
+
+    @Override
     public List<User> getUsers() {
         return new UserDAOImpl().getAll();
     }

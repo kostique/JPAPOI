@@ -74,8 +74,9 @@ public class DriverProfileServiceImpl extends EntityService implements DriverPro
 
             return driverProfiles;
         }
-        entityManager.getTransaction().begin();
-
+//        if (!entityManager.getTransaction().isActive()) {
+//            entityManager.getTransaction().begin();
+//        }
         create(driverProfiles, entityManager);
 
         return driverProfiles;
@@ -95,24 +96,41 @@ public class DriverProfileServiceImpl extends EntityService implements DriverPro
     }
 
     @Override
-    public DriverProfile update(DriverProfile driverProfile) {
+    public DriverProfile update(DriverProfile driverProfile, EntityManager entityManager) {
         UserDAO userDAO = new UserDAOImpl();
-        Long userId = driverProfile.getUser().getId();
+        String userName = driverProfile.getUser().getUsername();
+        System.out.println("userName = " + userName);
 
-        User existedUser = userDAO.getById(userId);
+        User existedUser;
+
+        if (entityManager == null) {
+            entityManager = getEntityManager();
+            entityManager.getTransaction().begin();
+            existedUser = userDAO.getByUserName(userName, entityManager);
+        } else {
+            existedUser = userDAO.getByUserName(userName, entityManager);
+        }
 
         if (null == existedUser) {
-            throw new DriverProfileNotFoundException("Driver profile with id=" + userId + " was not found.");
+            throw new DriverProfileNotFoundException("Driver profile with user=" + userName + " not found.");
         }
 
         DriverProfileService driverProfileService = new DriverProfileServiceImpl();
-        DriverProfile existingDriverProfile = driverProfileService.getById(driverProfile.getId());
+
+        DriverProfile existingDriverProfile = driverProfileService.getById(existedUser.getDriverProfile().getId());
         existingDriverProfile.setPhone(driverProfile.getPhone());
         existingDriverProfile.setFullName(driverProfile.getFullName());
-        existingDriverProfile.setUser(existedUser);
 
         DriverProfileDAO driverProfileDAO = new DriverProfileDAOImpl();
-        return driverProfileDAO.update(existingDriverProfile, getEntityManager());
+
+        DriverProfile updatedDriverProfile = driverProfileDAO.update(existingDriverProfile, entityManager);
+
+
+        if (entityManager == getEntityManager()){
+        entityManager.getTransaction().commit();
+        entityManager.close();
+        }
+        return updatedDriverProfile;
     }
 
     public void iterateList(List<DriverProfile> driverProfiles, EntityManager entityManager) {
@@ -137,30 +155,3 @@ public class DriverProfileServiceImpl extends EntityService implements DriverPro
         }
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-//        List<> excelParserService.parse(file);
-//        userService.create
-//        create

@@ -35,6 +35,15 @@ public class UserDAOImpl implements UserDAO {
     }
 
     @Override
+    public User getByUserName(String username, EntityManager entityManager){
+        System.out.println("eM = " + entityManager);
+        TypedQuery<User> query = entityManager.createQuery(
+                "SELECT u FROM User u WHERE u.username = :username", User.class);
+
+        return query.setParameter("username", username).getSingleResult();
+    }
+
+    @Override
     public void update(User user) {
         EntityManager entityManager = PersistenceUtil.getEntityManager();
         entityManager.getTransaction().begin();

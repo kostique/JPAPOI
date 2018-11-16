@@ -12,6 +12,8 @@ public interface UserService {
 
     User getById(long id);
 
+    User getByUsername(String name, EntityManager entityManager);
+
     List<User> getUsers();
 
     void update(User user);
