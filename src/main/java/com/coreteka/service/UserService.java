@@ -8,16 +8,14 @@ import java.util.List;
 
 public interface UserService {
 
-    User create(User user, EntityManager entityManager);
+    User create(User user);
 
     User getById(long id);
 
-    User getByUsername(String name, EntityManager entityManager);
+    User getByUsername(String name);
 
     List<User> getUsers();
 
-    void update(User user);
-
-    void deleteUser(long id);
+    User update(User user);
 
 }

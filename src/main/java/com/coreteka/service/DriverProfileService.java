@@ -10,15 +10,11 @@ import java.util.List;
 
 public interface DriverProfileService {
 
-        DriverProfile create(DriverProfile driverProfile, EntityManager entityManager);
-
-        void create(List<DriverProfile> driverProfile, EntityManager entityManager);
+        DriverProfile create(DriverProfile driverProfile);
 
         DriverProfile getById(long id);
 
-        List<DriverProfile> getDriverProfiles();
+        DriverProfile update(DriverProfile driverProfile);
 
-        DriverProfile update(DriverProfile driverProfile, EntityManager entityManager);
-
-        List<DriverProfile> create(File file, EntityManager entityManager) throws IOException, InvalidFormatException;
+        void create(File file) throws IOException, InvalidFormatException;
 }

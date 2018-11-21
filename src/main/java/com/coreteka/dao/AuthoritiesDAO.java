@@ -13,12 +13,9 @@ public interface AuthoritiesDAO {
     //read
     List<Authorities> getAuthoritiesList();
 
-    Authorities getByName(String name, EntityManager entityManager);
+    Authorities getByName(String name);
 
     //update
-    void update(String name);
-
-    //delete
-    void remove(String name);
+    Authorities update(String name);
 
 }

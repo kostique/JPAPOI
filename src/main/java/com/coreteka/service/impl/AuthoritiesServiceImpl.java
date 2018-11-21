@@ -4,51 +4,73 @@ import com.coreteka.dao.AuthoritiesDAO;
 import com.coreteka.dao.impl.AuthoritiesDAOImpl;
 import com.coreteka.entities.Authorities;
 import com.coreteka.service.AuthoritiesService;
-import com.coreteka.service.EntityService;
+import com.coreteka.util.PersistenceUtil;
 
 import javax.persistence.EntityManager;
 import java.util.List;
 
-public class AuthoritiesServiceImpl extends EntityService implements AuthoritiesService {
+public class AuthoritiesServiceImpl implements AuthoritiesService {
     @Override
     public Authorities create(Authorities authorities) {
         AuthoritiesDAO authoritiesDAO = new AuthoritiesDAOImpl();
-        return authoritiesDAO.create(authorities);
+
+        EntityManager entityManager = PersistenceUtil.getEntityManager();
+        entityManager.getTransaction().begin();
+
+        Authorities createdAuthorities = authoritiesDAO.create(authorities);
+
+        entityManager.getTransaction().commit();
+        entityManager.close();
+
+        return createdAuthorities;
     }
 
     @Override
-    public Authorities getByName(String name, EntityManager entityManager) {
+    public Authorities getByName(String name) {
         AuthoritiesDAO authoritiesDAO = new AuthoritiesDAOImpl();
+        Authorities authorities;
 
-        if (entityManager == null){
-            entityManager = getEntityManager();
+        EntityManager entityManager = PersistenceUtil.getEntityManager();
+
+        if (entityManager.getTransaction().isActive()) {
+             authorities = authoritiesDAO.getByName(name);
+        } else {
             entityManager.getTransaction().begin();
-
-            Authorities authorities = authoritiesDAO.getByName(name, entityManager);
-
+            authorities = authoritiesDAO.getByName(name);
             entityManager.getTransaction().commit();
             entityManager.close();
-            return authorities;
         }
-        Authorities authorities = authoritiesDAO.getByName(name, entityManager);
+
         return authorities;
     }
 
     @Override
     public List<Authorities> getAuthoritiesList() {
         AuthoritiesDAO authoritiesDAO = new AuthoritiesDAOImpl();
-        return authoritiesDAO.getAuthoritiesList();
+
+        EntityManager entityManager = PersistenceUtil.getEntityManager();
+        entityManager.getTransaction().begin();
+
+        List<Authorities> authoritiesList = authoritiesDAO.getAuthoritiesList();
+
+        entityManager.getTransaction().commit();
+        entityManager.close();
+
+        return authoritiesList;
     }
 
     @Override
-    public void update(String name) {
+    public Authorities update(String name) {
         AuthoritiesDAO authoritiesDAO = new AuthoritiesDAOImpl();
-        authoritiesDAO.update(name);
-    }
 
-    @Override
-    public void delete(String name) {
-        AuthoritiesDAO authoritiesDAO = new AuthoritiesDAOImpl();
-        authoritiesDAO.remove(name);
+        EntityManager entityManager = PersistenceUtil.getEntityManager();
+        entityManager.getTransaction().begin();
+
+        Authorities updatedAuthorities = authoritiesDAO.update(name);
+
+        entityManager.getTransaction().commit();
+        entityManager.close();
+
+        return updatedAuthorities;
     }
 }

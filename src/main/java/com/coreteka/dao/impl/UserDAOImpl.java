@@ -1,6 +1,7 @@
 package com.coreteka.dao.impl;
 
 import com.coreteka.dao.UserDAO;
+import com.coreteka.entities.Authorities;
 import com.coreteka.entities.User;
 import com.coreteka.util.PersistenceUtil;
 
@@ -10,56 +11,39 @@ import java.util.List;
 
 public class UserDAOImpl implements UserDAO {
     @Override
-    public User create(User user, EntityManager entityManager) {
+    public User create(User user) {
+        EntityManager entityManager = PersistenceUtil.getEntityManager();
         User createdUser = entityManager.merge(user);
         return createdUser;
-    }
-
-    @Override
-    public List<User> getAll() {
-        EntityManager entityManager = PersistenceUtil.getEntityManager();
-        entityManager.getTransaction().begin();
-        TypedQuery<User> query = entityManager.createQuery("FROM User a", User.class);
-        List<User> userList = query.getResultList();
-        entityManager.getTransaction().commit();
-        entityManager.close();
-        return userList;
     }
 
     @Override
     public User getById(long id) {
         EntityManager entityManager = PersistenceUtil.getEntityManager();
         User user = entityManager.find(User.class, id);
-        entityManager.close();
         return user;
     }
 
     @Override
-    public User getByUserName(String username, EntityManager entityManager){
-        System.out.println("eM = " + entityManager);
-        TypedQuery<User> query = entityManager.createQuery(
-                "SELECT u FROM User u WHERE u.username = :username", User.class);
-
+    public User getByUserName(String username){
+        EntityManager entityManager = PersistenceUtil.getEntityManager();
+        TypedQuery<User> query = entityManager.
+                createQuery("SELECT u FROM User u WHERE u.username = :username", User.class);
         return query.setParameter("username", username).getSingleResult();
     }
 
     @Override
-    public void update(User user) {
+    public List<User> getUsers() {
         EntityManager entityManager = PersistenceUtil.getEntityManager();
-        entityManager.getTransaction().begin();
-        entityManager.merge(user);
-        entityManager.getTransaction().commit();
-        entityManager.close();
+        TypedQuery<User> query = entityManager.createQuery("FROM User a", User.class);
+        List<User> userList = query.getResultList();
+        return userList;
     }
 
-
     @Override
-    public void remove(long id) {
+    public User update(User user) {
         EntityManager entityManager = PersistenceUtil.getEntityManager();
-        entityManager.getTransaction().begin();
-        User user = entityManager.find(User.class, id);
-        entityManager.remove(user);
-        entityManager.getTransaction().commit();
-        entityManager.close();
+        User updatedUser = entityManager.merge(user);
+        return updatedUser;
     }
 }

@@ -3,62 +3,96 @@ package com.coreteka.service.impl;
 import com.coreteka.dao.UserDAO;
 import com.coreteka.dao.impl.UserDAOImpl;
 import com.coreteka.entities.User;
-import com.coreteka.service.EntityService;
 import com.coreteka.service.UserService;
+import com.coreteka.util.PersistenceUtil;
+
 import javax.persistence.EntityManager;
 import java.util.List;
 
-public class UserServiceImpl extends EntityService implements UserService {
+public class UserServiceImpl implements UserService {
 
     @Override
-    public User create(User user, EntityManager entityManager) {
+    public User create(User user) {
         UserDAO userDAO = new UserDAOImpl();
-        if (entityManager == null) {
-            entityManager = getEntityManager();
+        User createdUser;
+
+        EntityManager entityManager = PersistenceUtil.getEntityManager();
+
+        if (entityManager.getTransaction().isActive()){
+            createdUser = userDAO.create(user);
+        } else {
             entityManager.getTransaction().begin();
-            User createdUser = userDAO.create(user, entityManager);
+            createdUser = entityManager.merge(user);
             entityManager.getTransaction().commit();
             entityManager.close();
-            return createdUser;
         }
-        User createdUser = userDAO.create(user, entityManager);
+
         return createdUser;
     }
 
     @Override
     public User getById(long id) {
-        return new UserDAOImpl().getById(id);
+        UserDAO userDAO = new UserDAOImpl();
+
+        EntityManager entityManager = PersistenceUtil.getEntityManager();
+        entityManager.getTransaction().begin();
+
+        User user = userDAO.getById(id);
+
+        entityManager.getTransaction().commit();
+        entityManager.close();
+
+        return user;
     }
 
     @Override
-    public User getByUsername(String username, EntityManager entityManager){
+    public User getByUsername(String username){
         UserDAO userDAO = new UserDAOImpl();
+        User user;
 
-        if (entityManager == null) {
-            entityManager = getEntityManager();
+        EntityManager entityManager = PersistenceUtil.getEntityManager();
+
+        if (entityManager.getTransaction().isActive()){
+            user = userDAO.getByUserName(username);
+        } else {
             entityManager.getTransaction().begin();
-            User user = userDAO.getByUserName(username, entityManager);
+
+            user = userDAO.getByUserName(username);
+
             entityManager.getTransaction().commit();
             entityManager.close();
-            return user;
         }
 
-        User user = userDAO.getByUserName(username, entityManager);
         return user;
     }
 
     @Override
     public List<User> getUsers() {
-        return new UserDAOImpl().getAll();
+        UserDAO userDAO = new UserDAOImpl();
+
+        EntityManager entityManager = PersistenceUtil.getEntityManager();
+        entityManager.getTransaction().begin();
+
+        List<User> userList = userDAO.getUsers();
+
+        entityManager.getTransaction().commit();
+        entityManager.close();
+
+        return userList;
     }
 
     @Override
-    public void update(User user) {
-        new UserDAOImpl().update(user);
-    }
+    public User update(User user) {
+        UserDAO userDAO = new UserDAOImpl();
 
-    @Override
-    public void deleteUser(long id) {
-        new UserDAOImpl().remove(id);
+        EntityManager entityManager = PersistenceUtil.getEntityManager();
+        entityManager.getTransaction().begin();
+
+        User updatedUser = userDAO.update(user);
+
+        entityManager.getTransaction().commit();
+        entityManager.close();
+
+        return updatedUser;
     }
 }

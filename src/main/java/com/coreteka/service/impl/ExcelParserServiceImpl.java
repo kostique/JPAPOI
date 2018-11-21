@@ -25,14 +25,10 @@ public class ExcelParserServiceImpl implements ExcelParserService {
 
             XSSFSheet sheet = workbook.getSheetAt(0);
 
-            /*AuthoritiesService authoritiesService = new AuthoritiesServiceImpl();
-            Set<Authorities> authoritiesSet = new HashSet<>();
-            authoritiesSet.add(authoritiesService.getByName("ROLE_DRIVER"));*/
-
             List<DriverProfile> driverProfiles = new ArrayList<>();
 
             Iterator<Row> iterator = sheet.iterator();
-            iterator.next();//Skipping header row
+            iterator.next(); //Skipping header row
 
             while (iterator.hasNext()){
                 Row row = iterator.next();
@@ -44,8 +40,6 @@ public class ExcelParserServiceImpl implements ExcelParserService {
                 User user = new User();
                 user.setUsername(username);
                 user.setPassword(password);
-                user.setUserStatus(true);
-//                user.setAuthorities(authoritiesSet);
 
                 DriverProfile driverProfile = new DriverProfile();
                 driverProfile.setFullName(fullName);
@@ -54,6 +48,7 @@ public class ExcelParserServiceImpl implements ExcelParserService {
 
                 driverProfiles.add(driverProfile);
             }
+
             return driverProfiles;
         }
     }

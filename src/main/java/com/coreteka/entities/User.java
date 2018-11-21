@@ -23,10 +23,6 @@ import java.util.Set;
         @OneToOne(mappedBy = "user", fetch = FetchType.LAZY)
         private DriverProfile driverProfile;
 
-        @Column (name = "user_status")
-        private boolean userStatus;
-
-
         @ManyToMany(cascade = CascadeType.ALL)
         @JoinTable(
                 name = "user_authorities",
@@ -79,14 +75,6 @@ import java.util.Set;
             this.authorities = authorities;
         }
 
-        public boolean isUserStatus() {
-            return userStatus;
-        }
-
-        public void setUserStatus(boolean userStatus) {
-            this.userStatus = userStatus;
-        }
-
         @Override
         public boolean equals(Object o) {
             if (this == o) return true;
@@ -108,7 +96,6 @@ import java.util.Set;
                     "id=" + id +
                     ", username='" + username + '\'' +
                     ", driverProfile=" + driverProfile +
-                    ", user_status=" + userStatus +
                     '}';
         }
     }

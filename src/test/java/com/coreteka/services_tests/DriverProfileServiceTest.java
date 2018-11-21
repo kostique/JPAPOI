@@ -25,76 +25,26 @@ public class DriverProfileServiceTest {
     @Test
     public void createDriverProfile() {
         DriverProfileService driverProfileService = new DriverProfileServiceImpl();
-        AuthoritiesService authoritiesService = new AuthoritiesServiceImpl();
 
         //Get token for all new driverProfile properties to be unique
         long token = System.currentTimeMillis();
-
-        //Get authorities from database for new driverProfile's user
-        Authorities authority = authoritiesService.getByName("ROLE_DRIVER", null);
-        Set<Authorities> authoritiesSet = new HashSet<>();
-        authoritiesSet.add(authority);
 
         //Create user for new driverProfile
         User user = new User();
         user.setPassword("qwerty");
         user.setUsername("userName" + token);
-        user.setUserStatus(true);
-        user.setAuthorities(authoritiesSet);
 
         //Create new driverProfile entity
         DriverProfile driverProfile = new DriverProfile();
         driverProfile.setFullName("Single");
         driverProfile.setPhone(String.valueOf(token));
         driverProfile.setUser(user);
-        DriverProfile createdDriverProfile = driverProfileService.create(driverProfile, null);
+        DriverProfile createdDriverProfile = driverProfileService.create(driverProfile);
 
         assertThat(createdDriverProfile.getId(), notNullValue());
     }
 
-    @Test
-    public void createDriverProfilesUsingDifferentServiceInstances(){
 
-        //Insert 5 driverProfile entries into DB using different instances of DriverProfileService
-        for (int i = 0; i < 5; i++){
-            createDriverProfile();
-        }
-    }
-
-    @Test
-    public void createDriverProfilesUsingTheSameServiceInstance() {
-        DriverProfileService driverProfileService = new DriverProfileServiceImpl();
-        AuthoritiesService authoritiesService = new AuthoritiesServiceImpl();
-
-        DriverProfile createdDriverProfile = null;
-
-        //Insert 5 driverProfile entries into DB using the same instance of DriverProfileService
-        for(int i = 0; i < 5; i++) {
-            long token = System.currentTimeMillis();
-
-            //Get authorities from database for new driverProfile's user
-            Authorities authority = authoritiesService.getByName("ROLE_DRIVER", null);
-            Set<Authorities> authoritiesSet = new HashSet<>();
-            authoritiesSet.add(authority);
-
-
-            //Create user for new driverProfile
-            User user = new User();
-            user.setPassword("qwerty");
-            user.setUsername("userName" + token);
-            user.setUserStatus(true);
-            user.setAuthorities(authoritiesSet);
-
-            //Create new driverProfile entity
-            DriverProfile driverProfile = new DriverProfile();
-            driverProfile.setFullName("FOR");
-            driverProfile.setPhone(String.valueOf(token));
-            driverProfile.setUser(user);
-
-            createdDriverProfile = driverProfileService.create(driverProfile, null);
-        }
-        assertThat(createdDriverProfile.getId(), notNullValue());
-    }
 
     @Test
     public void createDriverProfilesFromFile() throws IOException, InvalidFormatException {
@@ -103,40 +53,30 @@ public class DriverProfileServiceTest {
 
         DriverProfileService driverProfileService = new DriverProfileServiceImpl();
 
-        driverProfileService.create(file, null);
+        driverProfileService.create(file);
+
     }
 
 
     @Test
     public void getDriverProfileById() {
-        long driverProfileId = 26L;
+
+        long driverProfileId = 1L;
+
         DriverProfileService driverProfileService = new DriverProfileServiceImpl();
         DriverProfile driverProfile = driverProfileService.getById(driverProfileId);
-        assertThat(driverProfile.getId(), equalTo(26L));
-    }
 
-    @Test
-    public void getDriverProfileList() {
-        DriverProfileService driverProfileService = new DriverProfileServiceImpl();
-        List<DriverProfile> driverProfiles = driverProfileService.getDriverProfiles();
-        assertThat(driverProfiles.isEmpty(), is(false));
+        assertThat(driverProfile.getId(), equalTo(1L));
     }
 
 
     @Test
     public void updateDriverProfile() {
-        Authorities authority = new Authorities();
-        authority.setName("ROLE_DRIVER");
-        Set<Authorities> authoritiesSet = new HashSet<>();
-        authoritiesSet.add(authority);
-
         User user = new User();
-        user.setUsername("Bortic");
-        user.setUserStatus(true);
-        user.setAuthorities(authoritiesSet);
+        user.setUsername("Slavik");
 
         String newDriverProfileFullName = "FUHRER";
-        String newDriverProfilePhone = "105";
+        String newDriverProfilePhone = "107";
 
         DriverProfile driverProfile = new DriverProfile();
         driverProfile.setFullName(newDriverProfileFullName);
@@ -144,7 +84,7 @@ public class DriverProfileServiceTest {
         driverProfile.setUser(user);
 
         DriverProfileService driverProfileService = new DriverProfileServiceImpl();
-        driverProfile = driverProfileService.update(driverProfile, null);
+        driverProfile = driverProfileService.update(driverProfile);
         assertThat(driverProfile.getFullName(), equalTo(newDriverProfileFullName));
         assertThat(driverProfile.getPhone(), equalTo(newDriverProfilePhone));
     }

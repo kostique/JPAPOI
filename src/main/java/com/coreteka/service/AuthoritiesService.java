@@ -9,12 +9,10 @@ public interface AuthoritiesService {
 
     Authorities create(Authorities authorities);
 
-    Authorities getByName(String name, EntityManager entityManager);
+    Authorities getByName(String name);
 
     List<Authorities> getAuthoritiesList();
 
-    void update(String name);
-
-    void delete(String name);
+    Authorities update(String name);
 
 }

@@ -13,15 +13,13 @@ public class AuthoritiesDAOImpl implements AuthoritiesDAO {
     @Override
     public Authorities create(Authorities authorities) {
         EntityManager entityManager = PersistenceUtil.getEntityManager();
-        entityManager.getTransaction().begin();
         Authorities createdAuthorities = entityManager.merge(authorities);
-        entityManager.getTransaction().commit();
-        entityManager.close();
         return createdAuthorities;
     }
 
     @Override
-    public Authorities getByName(String name, EntityManager entityManager) {
+    public Authorities getByName(String name) {
+        EntityManager entityManager = PersistenceUtil.getEntityManager();
         Authorities authorities = entityManager.find(Authorities.class, name);
         return authorities;
     }
@@ -29,31 +27,17 @@ public class AuthoritiesDAOImpl implements AuthoritiesDAO {
     @Override
     public List<Authorities> getAuthoritiesList() {
         EntityManager entityManager = PersistenceUtil.getEntityManager();
-        entityManager.getTransaction().begin();
         TypedQuery<Authorities> query = entityManager.createQuery("Select a FROM Authorities a", Authorities.class);
         List<Authorities> authoritiesList = query.getResultList();
-        entityManager.getTransaction().commit();
-        entityManager.close();
         return authoritiesList;
     }
 
     @Override
-    public void update(String name) {
+    public Authorities update(String name) {
         EntityManager entityManager = PersistenceUtil.getEntityManager();
-        entityManager.getTransaction().begin();
         Authorities authorities = entityManager.find(Authorities.class, name);
         authorities.setName(name);
-        entityManager.getTransaction().commit();
-        entityManager.close();
-    }
-
-    @Override
-    public void remove(String name) {
-        EntityManager entityManager = PersistenceUtil.getEntityManager();
-        entityManager.getTransaction().begin();
-        Authorities authorities = entityManager.find(Authorities.class, name);
-        entityManager.remove(authorities);
-        entityManager.getTransaction().commit();
-        entityManager.close();
+        Authorities updatedAuthorities = entityManager.merge(authorities);
+        return updatedAuthorities;
     }
 }

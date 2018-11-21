@@ -92,8 +92,8 @@
       <ObjectId>2200</ObjectId>
       <Comment>standard public schema</Comment>
       <Owner>postgres</Owner>
-      <IntrospectionTimestamp>2018-11-16.13:56:41.753</IntrospectionTimestamp>
-      <IntrospectionStateNumber>103091</IntrospectionStateNumber>
+      <IntrospectionTimestamp>2018-11-21.15:06:56.415</IntrospectionTimestamp>
+      <IntrospectionStateNumber>103393</IntrospectionStateNumber>
       <Current>1</Current>
       <Visible>1</Visible>
     </schema>
@@ -140,57 +140,57 @@
       <Type>index</Type>
     </access-method>
     <sequence id="25" parent="18" name="t_driver_profile_id_seq">
-      <ObjectId>18425</ObjectId>
+      <ObjectId>18836</ObjectId>
       <Owner>kostique</Owner>
-      <StateNumber>103084</StateNumber>
+      <StateNumber>103386</StateNumber>
       <SequenceIdentity>1</SequenceIdentity>
       <BelongsToColumn>1</BelongsToColumn>
       <CacheSize>1</CacheSize>
       <DataType>bigint</DataType>
     </sequence>
     <sequence id="26" parent="18" name="t_user_id_seq">
-      <ObjectId>18436</ObjectId>
+      <ObjectId>18847</ObjectId>
       <Owner>kostique</Owner>
-      <StateNumber>103085</StateNumber>
+      <StateNumber>103387</StateNumber>
       <SequenceIdentity>1</SequenceIdentity>
       <BelongsToColumn>1</BelongsToColumn>
       <CacheSize>1</CacheSize>
       <DataType>bigint</DataType>
     </sequence>
     <table id="27" parent="18" name="t_authorities">
-      <ObjectId>18420</ObjectId>
+      <ObjectId>18831</ObjectId>
       <Owner>kostique</Owner>
-      <StateNumber>103090</StateNumber>
+      <StateNumber>103392</StateNumber>
     </table>
     <table id="28" parent="18" name="t_driver_profile">
-      <ObjectId>18427</ObjectId>
+      <ObjectId>18838</ObjectId>
       <Owner>kostique</Owner>
-      <StateNumber>103089</StateNumber>
+      <StateNumber>103391</StateNumber>
     </table>
     <table id="29" parent="18" name="t_user">
-      <ObjectId>18438</ObjectId>
+      <ObjectId>18849</ObjectId>
       <Owner>kostique</Owner>
-      <StateNumber>103091</StateNumber>
+      <StateNumber>103393</StateNumber>
     </table>
     <table id="30" parent="18" name="user_authorities">
-      <ObjectId>18447</ObjectId>
+      <ObjectId>18858</ObjectId>
       <Owner>kostique</Owner>
-      <StateNumber>103091</StateNumber>
+      <StateNumber>103393</StateNumber>
     </table>
     <column id="31" parent="27" name="name">
       <Position>1</Position>
       <DataType>varchar(255)|0s</DataType>
       <NotNull>1</NotNull>
-      <StateNumber>103083</StateNumber>
+      <StateNumber>103385</StateNumber>
       <TypeId>1043</TypeId>
     </column>
     <index id="32" parent="27" name="t_authorities_pkey">
-      <ObjectId>18423</ObjectId>
+      <ObjectId>18834</ObjectId>
       <ColNames>name</ColNames>
       <Unique>1</Unique>
     </index>
     <key id="33" parent="27" name="t_authorities_pkey">
-      <ObjectId>18424</ObjectId>
+      <ObjectId>18835</ObjectId>
       <ColNames>name</ColNames>
       <UnderlyingIndexName>t_authorities_pkey</UnderlyingIndexName>
       <Primary>1</Primary>
@@ -199,7 +199,7 @@
       <Position>1</Position>
       <DataType>bigint|0s</DataType>
       <NotNull>1</NotNull>
-      <StateNumber>103084</StateNumber>
+      <StateNumber>103386</StateNumber>
       <DefaultExpression>nextval(&apos;t_driver_profile_id_seq&apos;::regclass)</DefaultExpression>
       <TypeId>20</TypeId>
       <SequenceName>t_driver_profile_id_seq</SequenceName>
@@ -207,47 +207,47 @@
     <column id="35" parent="28" name="full_name">
       <Position>2</Position>
       <DataType>varchar(255)|0s</DataType>
-      <StateNumber>103084</StateNumber>
+      <StateNumber>103386</StateNumber>
       <TypeId>1043</TypeId>
     </column>
     <column id="36" parent="28" name="phone">
       <Position>3</Position>
       <DataType>varchar(255)|0s</DataType>
-      <StateNumber>103084</StateNumber>
+      <StateNumber>103386</StateNumber>
       <TypeId>1043</TypeId>
     </column>
     <column id="37" parent="28" name="user_id">
       <Position>4</Position>
       <DataType>bigint|0s</DataType>
       <NotNull>1</NotNull>
-      <StateNumber>103084</StateNumber>
+      <StateNumber>103386</StateNumber>
       <TypeId>20</TypeId>
     </column>
     <index id="38" parent="28" name="t_driver_profile_pkey">
-      <ObjectId>18434</ObjectId>
+      <ObjectId>18845</ObjectId>
       <ColNames>id</ColNames>
       <Unique>1</Unique>
     </index>
     <index id="39" parent="28" name="uk_mux5inq6u2k5qxe49yhuy01q3">
-      <ObjectId>18452</ObjectId>
+      <ObjectId>18863</ObjectId>
       <ColNames>user_id</ColNames>
       <Unique>1</Unique>
     </index>
     <key id="40" parent="28" name="t_driver_profile_pkey">
-      <ObjectId>18435</ObjectId>
+      <ObjectId>18846</ObjectId>
       <ColNames>id</ColNames>
       <UnderlyingIndexName>t_driver_profile_pkey</UnderlyingIndexName>
       <Primary>1</Primary>
     </key>
     <key id="41" parent="28" name="uk_mux5inq6u2k5qxe49yhuy01q3">
-      <ObjectId>18453</ObjectId>
+      <ObjectId>18864</ObjectId>
       <ColNames>user_id</ColNames>
       <UnderlyingIndexName>uk_mux5inq6u2k5qxe49yhuy01q3</UnderlyingIndexName>
     </key>
     <foreign-key id="42" parent="28" name="fk9d37kbvpir3l51fsawionvf1v">
-      <ObjectId>18456</ObjectId>
+      <ObjectId>18867</ObjectId>
       <ColNames>user_id</ColNames>
-      <RefTableId>18438</RefTableId>
+      <RefTableId>18849</RefTableId>
       <RefColPositions>1</RefColPositions>
       <RefTableName>t_user</RefTableName>
       <RefKeyName>t_user_pkey</RefKeyName>
@@ -257,7 +257,7 @@
       <Position>1</Position>
       <DataType>bigint|0s</DataType>
       <NotNull>1</NotNull>
-      <StateNumber>103085</StateNumber>
+      <StateNumber>103387</StateNumber>
       <DefaultExpression>nextval(&apos;t_user_id_seq&apos;::regclass)</DefaultExpression>
       <TypeId>20</TypeId>
       <SequenceName>t_user_id_seq</SequenceName>
@@ -265,82 +265,76 @@
     <column id="44" parent="29" name="password">
       <Position>2</Position>
       <DataType>varchar(255)|0s</DataType>
-      <StateNumber>103085</StateNumber>
+      <StateNumber>103387</StateNumber>
       <TypeId>1043</TypeId>
     </column>
-    <column id="45" parent="29" name="user_status">
+    <column id="45" parent="29" name="username">
       <Position>3</Position>
-      <DataType>boolean|0s</DataType>
-      <StateNumber>103085</StateNumber>
-      <TypeId>16</TypeId>
-    </column>
-    <column id="46" parent="29" name="username">
-      <Position>4</Position>
       <DataType>varchar(255)|0s</DataType>
-      <StateNumber>103085</StateNumber>
+      <StateNumber>103387</StateNumber>
       <TypeId>1043</TypeId>
     </column>
-    <index id="47" parent="29" name="t_user_pkey">
-      <ObjectId>18445</ObjectId>
+    <index id="46" parent="29" name="t_user_pkey">
+      <ObjectId>18856</ObjectId>
       <ColNames>id</ColNames>
       <Unique>1</Unique>
     </index>
-    <index id="48" parent="29" name="uk_jhib4legehrm4yscx9t3lirqi">
-      <ObjectId>18454</ObjectId>
+    <index id="47" parent="29" name="uk_jhib4legehrm4yscx9t3lirqi">
+      <ObjectId>18865</ObjectId>
       <ColNames>username</ColNames>
       <Unique>1</Unique>
     </index>
-    <key id="49" parent="29" name="t_user_pkey">
-      <ObjectId>18446</ObjectId>
+    <key id="48" parent="29" name="t_user_pkey">
+      <ObjectId>18857</ObjectId>
       <ColNames>id</ColNames>
       <UnderlyingIndexName>t_user_pkey</UnderlyingIndexName>
       <Primary>1</Primary>
     </key>
-    <key id="50" parent="29" name="uk_jhib4legehrm4yscx9t3lirqi">
-      <ObjectId>18455</ObjectId>
+    <key id="49" parent="29" name="uk_jhib4legehrm4yscx9t3lirqi">
+      <ObjectId>18866</ObjectId>
       <ColNames>username</ColNames>
       <UnderlyingIndexName>uk_jhib4legehrm4yscx9t3lirqi</UnderlyingIndexName>
     </key>
-    <column id="51" parent="30" name="user_id">
+    <column id="50" parent="30" name="user_id">
       <Position>1</Position>
       <DataType>bigint|0s</DataType>
       <NotNull>1</NotNull>
-      <StateNumber>103086</StateNumber>
+      <StateNumber>103388</StateNumber>
       <TypeId>20</TypeId>
     </column>
-    <column id="52" parent="30" name="auth_name">
+    <column id="51" parent="30" name="auth_name">
       <Position>2</Position>
       <DataType>varchar(255)|0s</DataType>
       <NotNull>1</NotNull>
-      <StateNumber>103086</StateNumber>
+      <StateNumber>103388</StateNumber>
       <TypeId>1043</TypeId>
     </column>
-    <index id="53" parent="30" name="user_authorities_pkey">
-      <ObjectId>18450</ObjectId>
+    <index id="52" parent="30" name="user_authorities_pkey">
+      <ObjectId>18861</ObjectId>
       <ColNames>user_id
 auth_name</ColNames>
       <Unique>1</Unique>
     </index>
-    <key id="54" parent="30" name="user_authorities_pkey">
-      <ObjectId>18451</ObjectId>
+    <key id="53" parent="30" name="user_authorities_pkey">
+      <ObjectId>18862</ObjectId>
       <ColNames>user_id
 auth_name</ColNames>
       <UnderlyingIndexName>user_authorities_pkey</UnderlyingIndexName>
       <Primary>1</Primary>
     </key>
-    <foreign-key id="55" parent="30" name="fkcp4tnod2wmes8pcfleq5h68ya">
-      <ObjectId>18466</ObjectId>
+    <foreign-key id="54" parent="30" name="fkcp4tnod2wmes8pcfleq5h68ya">
+      <ObjectId>18877</ObjectId>
       <ColNames>user_id</ColNames>
-      <RefTableId>18438</RefTableId>
+      <RefTableId>18849</RefTableId>
       <RefColPositions>1</RefColPositions>
       <RefTableName>t_user</RefTableName>
       <RefKeyName>t_user_pkey</RefKeyName>
       <RefColNames>id</RefColNames>
     </foreign-key>
-    <foreign-key id="56" parent="30" name="fkk0ha7hvudx7pln846ws9ax139">
-      <ObjectId>18461</ObjectId>
+    <foreign-key id="55" parent="30" name="fkk0ha7hvudx7pln846ws9ax139">
+      <ObjectId>18872</ObjectId>
       <ColNames>auth_name</ColNames>
-      <RefTableId>18420</RefTableId>
+      <RefTableId>18831</RefTableId>
       <RefColPositions>1</RefColPositions>
       <RefTableName>t_authorities</RefTableName>
       <RefKeyName>t_authorities_pkey</RefKeyName>

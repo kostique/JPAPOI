@@ -8,18 +8,16 @@ import java.util.List;
 public interface UserDAO {
 
     //create
-    User create(User user, EntityManager entityManager);
+    User create(User user);
 
     //read
-    List<User> getAll();
+    List<User> getUsers();
 
     User getById(long id);
 
-    User getByUserName(String username, EntityManager entityManager);
+    User getByUserName(String username);
 
     //update
-    void update(User user);
+    User update(User user);
 
-    //delete
-    void remove(long id);
 }

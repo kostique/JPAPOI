@@ -17,28 +17,5 @@ import java.util.Set;
 public class UserServiceTest {
     
     @Test
-    public void createUser(){
-
-        AuthoritiesService authoritiesService = new AuthoritiesServiceImpl();
-        List<Authorities> authoritiesList = authoritiesService.getAuthoritiesList();
-        if (authoritiesList.isEmpty()){
-            System.out.println("Please populate t_authorities table to run this test");
-        }
-
-        long i = new Random().nextLong();
-        User user = new User();
-        user.setUsername("Murz" + i);
-        user.setPassword("***" + i);
-        user.setUserStatus(true);
-
-        Set<Authorities> authoritiesSet = new HashSet<>();
-        authoritiesSet.add(authoritiesList.get(0));
-
-        user.setAuthorities(authoritiesSet);
-
-        UserService userService = new UserServiceImpl();
-
-        //userService.create(user);
-
-    }
+    public void createUser(){}
 }
