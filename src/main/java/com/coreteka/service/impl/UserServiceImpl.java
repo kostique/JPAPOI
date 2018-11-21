@@ -2,19 +2,30 @@ package com.coreteka.service.impl;
 
 import com.coreteka.dao.UserDAO;
 import com.coreteka.dao.impl.UserDAOImpl;
+import com.coreteka.entities.Authorities;
 import com.coreteka.entities.User;
+import com.coreteka.service.AuthoritiesService;
 import com.coreteka.service.UserService;
 import com.coreteka.util.PersistenceUtil;
 
 import javax.persistence.EntityManager;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class UserServiceImpl implements UserService {
 
     @Override
-    public User create(User user) {
+    public User create(User user, String role) {
         UserDAO userDAO = new UserDAOImpl();
         User createdUser;
+        AuthoritiesService authoritiesService = new AuthoritiesServiceImpl();
+
+        Authorities authority = authoritiesService.getByName(role);
+        Set<Authorities> authoritiesSet = new HashSet<>();
+        authoritiesSet.add(authority);
+
+        user.setAuthorities(authoritiesSet);
 
         EntityManager entityManager = PersistenceUtil.getEntityManager();
 
@@ -22,7 +33,7 @@ public class UserServiceImpl implements UserService {
             createdUser = userDAO.create(user);
         } else {
             entityManager.getTransaction().begin();
-            createdUser = entityManager.merge(user);
+            createdUser = userDAO.create(user);
             entityManager.getTransaction().commit();
             entityManager.close();
         }

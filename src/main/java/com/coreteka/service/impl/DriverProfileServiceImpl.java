@@ -20,11 +20,14 @@ public class DriverProfileServiceImpl implements DriverProfileService {
     @Override
     public DriverProfile create(DriverProfile driverProfile) {
         DriverProfileDAO driverProfileDAO = new DriverProfileDAOImpl();
+        UserService userService = new UserServiceImpl();
 
         EntityManager entityManager = PersistenceUtil.getEntityManager();
         entityManager.getTransaction().begin();
 
-        setDriverProfileProperties(driverProfile);
+        User createdUser = userService.create(driverProfile.getUser(), "ROLE_DRIVER");
+        driverProfile.setUser(createdUser);
+
         DriverProfile createdDriverProfile = driverProfileDAO.create(driverProfile);
 
         entityManager.getTransaction().commit();
@@ -33,26 +36,10 @@ public class DriverProfileServiceImpl implements DriverProfileService {
         return createdDriverProfile;
     }
 
-
-    private void setDriverProfileProperties(DriverProfile driverProfile){
-        UserService userService = new UserServiceImpl();
-        AuthoritiesService authoritiesService = new AuthoritiesServiceImpl();
-
-        Authorities authority = authoritiesService.getByName("ROLE_DRIVER");
-        Set<Authorities> authoritiesSet = new HashSet<>();
-        authoritiesSet.add(authority);
-
-        User user = driverProfile.getUser();
-        user.setAuthorities(authoritiesSet);
-
-        User createdUser = userService.create(user);
-        driverProfile.setUser(createdUser);
-    }
-
-
     @Override
     public void create(File file) throws IOException, InvalidFormatException {
         ExcelParserService excelParserService = new ExcelParserServiceImpl();
+        UserService userService = new UserServiceImpl();
         List<DriverProfile> driverProfiles = excelParserService.parse(file);
         Iterator<DriverProfile> iterator = driverProfiles.iterator();
         DriverProfileDAO driverProfileDAO = new DriverProfileDAOImpl();
@@ -62,7 +49,8 @@ public class DriverProfileServiceImpl implements DriverProfileService {
 
         while (iterator.hasNext()) {
             DriverProfile driverProfile = iterator.next();
-            setDriverProfileProperties(driverProfile);
+            User createdUser = userService.create(driverProfile.getUser(), "ROLE_DRIVER");
+            driverProfile.setUser(createdUser);
             driverProfileDAO.create(driverProfile);
         }
 
