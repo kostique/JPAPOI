@@ -7,7 +7,6 @@ import com.coreteka.service.AuthoritiesService;
 import com.coreteka.util.PersistenceUtil;
 
 import javax.persistence.EntityManager;
-import java.io.IOException;
 import java.util.List;
 
 public class AuthoritiesServiceImpl implements AuthoritiesService {
@@ -29,32 +28,20 @@ public class AuthoritiesServiceImpl implements AuthoritiesService {
     @Override
     public Authorities getByName(String name) {
         AuthoritiesDAO authoritiesDAO = new AuthoritiesDAOImpl();
-        Authorities authorities;
-        EntityManager entityManager = PersistenceUtil.getEntityManager();
-        if (entityManager.getTransaction().isActive()) {
-            authorities = authoritiesDAO.getByName(name);
-        } else {
-            entityManager.getTransaction().begin();
-            authorities = authoritiesDAO.getByName(name);
-            entityManager.getTransaction().commit();
-            entityManager.close();
-        }
-        return authorities;
-
-    }
+        return  authoritiesDAO.getByName(name);    }
 
 
     @Override
     public List<Authorities> getAuthoritiesList() {
         AuthoritiesDAO authoritiesDAO = new AuthoritiesDAOImpl();
 
-        EntityManager entityManager = PersistenceUtil.getEntityManager();
-        entityManager.getTransaction().begin();
+//        EntityManager entityManager = PersistenceUtil.getEntityManager();
+//        entityManager.getTransaction().begin();
 
         List<Authorities> authoritiesList = authoritiesDAO.getAuthoritiesList();
 
-        entityManager.getTransaction().commit();
-        entityManager.close();
+//        entityManager.getTransaction().commit();
+//        entityManager.close();
 
         return authoritiesList;
     }

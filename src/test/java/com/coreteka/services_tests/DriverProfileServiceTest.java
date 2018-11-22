@@ -1,21 +1,14 @@
 package com.coreteka.services_tests;
 
-import com.coreteka.entities.Authorities;
 import com.coreteka.entities.DriverProfile;
 import com.coreteka.entities.User;
-import com.coreteka.service.AuthoritiesService;
 import com.coreteka.service.DriverProfileService;
-import com.coreteka.service.impl.AuthoritiesServiceImpl;
 import com.coreteka.service.impl.DriverProfileServiceImpl;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.junit.Test;
 import java.io.File;
 import java.io.IOException;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
 import static org.hamcrest.CoreMatchers.equalTo;
-import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 
@@ -26,7 +19,7 @@ public class DriverProfileServiceTest {
     public void createDriverProfile() {
         DriverProfileService driverProfileService = new DriverProfileServiceImpl();
 
-        //Get token for all new driverProfile properties to be unique
+        //Get token for all new driverProfile properties to have unique properties
         long token = System.currentTimeMillis();
 
         //Create user for new driverProfile
@@ -39,7 +32,7 @@ public class DriverProfileServiceTest {
         driverProfile.setFullName("Single");
         driverProfile.setPhone(String.valueOf(token));
         driverProfile.setUser(user);
-        DriverProfile createdDriverProfile = driverProfileService.create(driverProfile);
+        DriverProfile createdDriverProfile = driverProfileService.create(driverProfile, null);
 
         assertThat(createdDriverProfile.getId(), notNullValue());
     }

@@ -8,10 +8,8 @@ import java.util.List;
 public interface DriverProfileDAO {
 
     //create
-    DriverProfile create(DriverProfile driverProfile);
+    DriverProfile create(DriverProfile driverProfile, EntityManager entityManager);
 
-    //read
-    List<DriverProfile> getDriverProfiles();
 
     DriverProfile getById(long id);
 

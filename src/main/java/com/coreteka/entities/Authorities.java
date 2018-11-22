@@ -16,7 +16,6 @@ public class Authorities {
     private Set<User> users;
 
     public Authorities() {
-
     }
 
     public Authorities(String name, Set<User> users) {

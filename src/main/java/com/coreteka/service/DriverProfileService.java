@@ -10,7 +10,7 @@ import java.util.List;
 
 public interface DriverProfileService {
 
-        DriverProfile create(DriverProfile driverProfile);
+        DriverProfile create(DriverProfile driverProfile, EntityManager entityManager);
 
         DriverProfile getById(long id);
 

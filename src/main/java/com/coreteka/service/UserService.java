@@ -8,13 +8,11 @@ import java.util.List;
 
 public interface UserService {
 
-    User create(User user, String role);
+    User create(User user, String role, EntityManager entityManager);
 
     User getById(long id);
 
-    User getByUsername(String name);
-
-    List<User> getUsers();
+    User getByUsername(String name, EntityManager entityManager);
 
     User update(User user);
 

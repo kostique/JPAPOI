@@ -11,19 +11,9 @@ import java.util.List;
 public class DriverProfileDAOImpl implements DriverProfileDAO {
 
     @Override
-    public DriverProfile create(DriverProfile driverProfile) {
-        EntityManager entityManager = PersistenceUtil.getEntityManager();
-        DriverProfile createdDriverProfile = entityManager.merge(driverProfile);
-        return createdDriverProfile;
-    }
-
-    @Override
-    public List<DriverProfile> getDriverProfiles() {
-        EntityManager entityManager = PersistenceUtil.getEntityManager();
-        TypedQuery<DriverProfile> query =
-                entityManager.createQuery("SELECT d FROM DriverProfile d", DriverProfile.class);
-        List<DriverProfile> driverProfileList = query.getResultList();
-        return driverProfileList;
+    public DriverProfile create(DriverProfile driverProfile, EntityManager entityManager) {
+        driverProfile = entityManager.merge(driverProfile);
+        return driverProfile;
     }
 
     @Override

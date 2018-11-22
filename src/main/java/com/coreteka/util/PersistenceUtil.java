@@ -14,15 +14,25 @@ public class PersistenceUtil {
         return entityManager;
     }
 
-    public static EntityManagerFactory getEntityManagerFactory() {
+    private static EntityManagerFactory getEntityManagerFactory() {
         if (emFactory == null) {
             emFactory = Persistence.createEntityManagerFactory("NewPersistenceUnit");
-            return emFactory;
-        } else
+        }
             return emFactory;
     }
 
     public static void close() {
         emFactory.close();
     }
+
+//    public static void beginTransaction(){
+//        if (!getEntityManager().getTransaction().isActive())
+//            entityManager.getTransaction().begin();
+//    }
+//
+//    public static void commitTransaction(){
+//        if(getEntityManager().getTransaction().isActive()){
+//           entityManager.getTransaction().commit();
+//        }
+//    }
 }

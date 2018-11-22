@@ -11,8 +11,7 @@ import java.util.List;
 
 public class UserDAOImpl implements UserDAO {
     @Override
-    public User create(User user) {
-        EntityManager entityManager = PersistenceUtil.getEntityManager();
+    public User create(User user, EntityManager entityManager) {
         User createdUser = entityManager.merge(user);
         return createdUser;
     }
@@ -25,19 +24,10 @@ public class UserDAOImpl implements UserDAO {
     }
 
     @Override
-    public User getByUserName(String username){
-        EntityManager entityManager = PersistenceUtil.getEntityManager();
+    public User getByUserName(String username, EntityManager entityManager){
         TypedQuery<User> query = entityManager.
                 createQuery("SELECT u FROM User u WHERE u.username = :username", User.class);
         return query.setParameter("username", username).getSingleResult();
-    }
-
-    @Override
-    public List<User> getUsers() {
-        EntityManager entityManager = PersistenceUtil.getEntityManager();
-        TypedQuery<User> query = entityManager.createQuery("FROM User a", User.class);
-        List<User> userList = query.getResultList();
-        return userList;
     }
 
     @Override

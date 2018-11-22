@@ -16,80 +16,68 @@ import java.util.Set;
 public class UserServiceImpl implements UserService {
 
     @Override
-    public User create(User user, String role) {
+    public User create(User user, String role, EntityManager entityManager) {
         UserDAO userDAO = new UserDAOImpl();
-        User createdUser;
-        AuthoritiesService authoritiesService = new AuthoritiesServiceImpl();
+        EntityManager newEntityManager;
 
+        AuthoritiesService authoritiesService = new AuthoritiesServiceImpl();
         Authorities authority = authoritiesService.getByName(role);
         Set<Authorities> authoritiesSet = new HashSet<>();
         authoritiesSet.add(authority);
 
         user.setAuthorities(authoritiesSet);
 
-        EntityManager entityManager = PersistenceUtil.getEntityManager();
+        if (entityManager == null || !entityManager.getTransaction().isActive()) {
+            newEntityManager = PersistenceUtil.getEntityManager();
+            newEntityManager.getTransaction().begin();
 
-        if (entityManager.getTransaction().isActive()){
-            createdUser = userDAO.create(user);
         } else {
-            entityManager.getTransaction().begin();
-            createdUser = userDAO.create(user);
-            entityManager.getTransaction().commit();
-            entityManager.close();
+
+            newEntityManager = entityManager;
         }
 
-        return createdUser;
+        user = userDAO.create(user, newEntityManager);
+
+        if (entityManager == null) {
+            newEntityManager.getTransaction().commit();
+            newEntityManager.close();
+        }
+
+        return user;
     }
+
 
     @Override
     public User getById(long id) {
         UserDAO userDAO = new UserDAOImpl();
-
-        EntityManager entityManager = PersistenceUtil.getEntityManager();
-        entityManager.getTransaction().begin();
-
-        User user = userDAO.getById(id);
-
-        entityManager.getTransaction().commit();
-        entityManager.close();
-
-        return user;
+        return userDAO.getById(id);
     }
 
+
     @Override
-    public User getByUsername(String username){
+    public User getByUsername(String username, EntityManager entityManager){
         UserDAO userDAO = new UserDAOImpl();
         User user;
 
-        EntityManager entityManager = PersistenceUtil.getEntityManager();
+        EntityManager newEntityManager;
 
-        if (entityManager.getTransaction().isActive()){
-            user = userDAO.getByUserName(username);
+        if (entityManager == null || !entityManager.getTransaction().isActive()) {
+            newEntityManager = PersistenceUtil.getEntityManager();
+            newEntityManager.getTransaction().begin();
+
         } else {
-            entityManager.getTransaction().begin();
 
-            user = userDAO.getByUserName(username);
+            newEntityManager = entityManager;
+        }
 
-            entityManager.getTransaction().commit();
-            entityManager.close();
+        user = userDAO.getByUserName(username, newEntityManager);
+
+        if (entityManager == null) {
+            newEntityManager.getTransaction().commit();
+            newEntityManager.close();
         }
 
         return user;
-    }
-
-    @Override
-    public List<User> getUsers() {
-        UserDAO userDAO = new UserDAOImpl();
-
-        EntityManager entityManager = PersistenceUtil.getEntityManager();
-        entityManager.getTransaction().begin();
-
-        List<User> userList = userDAO.getUsers();
-
-        entityManager.getTransaction().commit();
-        entityManager.close();
-
-        return userList;
     }
 
     @Override

@@ -18,22 +18,32 @@ import java.util.Set;
 public class DriverProfileServiceImpl implements DriverProfileService {
 
     @Override
-    public DriverProfile create(DriverProfile driverProfile) {
+    public DriverProfile create(DriverProfile driverProfile, EntityManager entityManager) {
         DriverProfileDAO driverProfileDAO = new DriverProfileDAOImpl();
         UserService userService = new UserServiceImpl();
+        EntityManager newEntityManager;
 
-        EntityManager entityManager = PersistenceUtil.getEntityManager();
-        entityManager.getTransaction().begin();
+        if (entityManager == null || !entityManager.getTransaction().isActive()) {
+            newEntityManager = PersistenceUtil.getEntityManager();
+            newEntityManager.getTransaction().begin();
 
-        User createdUser = userService.create(driverProfile.getUser(), "ROLE_DRIVER");
+        } else {
+
+            newEntityManager = entityManager;
+        }
+
+        User createdUser = userService.create(driverProfile.getUser(), "ROLE_DRIVER", newEntityManager);
         driverProfile.setUser(createdUser);
 
-        DriverProfile createdDriverProfile = driverProfileDAO.create(driverProfile);
+        DriverProfile createdDriverProfile = driverProfileDAO.create(driverProfile, newEntityManager);
 
-        entityManager.getTransaction().commit();
-        entityManager.close();
+        if (entityManager == null) {
+            newEntityManager.getTransaction().commit();
+            newEntityManager.close();
+        }
 
         return createdDriverProfile;
+
     }
 
     @Override
@@ -49,9 +59,9 @@ public class DriverProfileServiceImpl implements DriverProfileService {
 
         while (iterator.hasNext()) {
             DriverProfile driverProfile = iterator.next();
-            User createdUser = userService.create(driverProfile.getUser(), "ROLE_DRIVER");
+            User createdUser = userService.create(driverProfile.getUser(), "ROLE_DRIVER", entityManager);
             driverProfile.setUser(createdUser);
-            driverProfileDAO.create(driverProfile);
+            driverProfileDAO.create(driverProfile, entityManager);
         }
 
         entityManager.getTransaction().commit();
@@ -61,15 +71,7 @@ public class DriverProfileServiceImpl implements DriverProfileService {
     @Override
     public DriverProfile getById(long id) {
         DriverProfileDAO driverProfileDAO = new DriverProfileDAOImpl();
-
-        EntityManager entityManager = PersistenceUtil.getEntityManager();
-        entityManager.getTransaction().begin();
-
         DriverProfile driverProfile = driverProfileDAO.getById(id);
-
-        entityManager.getTransaction().commit();
-        entityManager.close();
-
         return driverProfile;
     }
 
@@ -81,7 +83,7 @@ public class DriverProfileServiceImpl implements DriverProfileService {
         EntityManager entityManager = PersistenceUtil.getEntityManager();
         entityManager.getTransaction().begin();
 
-        User existingUser = userDAO.getByUserName(userName);
+        User existingUser = userDAO.getByUserName(userName, entityManager);
 
         if (null == existingUser) {
             throw new DriverProfileNotFoundException("Driver profile with user=" + userName + " not found.");
