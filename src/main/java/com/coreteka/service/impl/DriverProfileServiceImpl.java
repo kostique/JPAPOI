@@ -47,25 +47,35 @@ public class DriverProfileServiceImpl implements DriverProfileService {
     }
 
     @Override
-    public void create(File file) throws IOException, InvalidFormatException {
+    public void create(File file, EntityManager entityManager) throws IOException, InvalidFormatException {
         ExcelParserService excelParserService = new ExcelParserServiceImpl();
         UserService userService = new UserServiceImpl();
-        List<DriverProfile> driverProfiles = excelParserService.parse(file);
-        Iterator<DriverProfile> iterator = driverProfiles.iterator();
         DriverProfileDAO driverProfileDAO = new DriverProfileDAOImpl();
 
-        EntityManager entityManager = PersistenceUtil.getEntityManager();
-        entityManager.getTransaction().begin();
+        EntityManager newEntityManager;
 
-        while (iterator.hasNext()) {
-            DriverProfile driverProfile = iterator.next();
-            User createdUser = userService.create(driverProfile.getUser(), "ROLE_DRIVER", entityManager);
-            driverProfile.setUser(createdUser);
-            driverProfileDAO.create(driverProfile, entityManager);
+        if (entityManager == null || !entityManager.getTransaction().isActive()) {
+            newEntityManager = PersistenceUtil.getEntityManager();
+            newEntityManager.getTransaction().begin();
+
+        } else {
+
+            newEntityManager = entityManager;
         }
 
-        entityManager.getTransaction().commit();
-        entityManager.close();
+        List<DriverProfile> driverProfiles = excelParserService.parse(file);
+        Iterator<DriverProfile> iterator = driverProfiles.iterator();
+        while (iterator.hasNext()) {
+            DriverProfile driverProfile = iterator.next();
+            User createdUser = userService.create(driverProfile.getUser(), "ROLE_DRIVER", newEntityManager);
+            driverProfile.setUser(createdUser);
+            driverProfileDAO.create(driverProfile, newEntityManager);
+        }
+
+        if (entityManager == null) {
+            newEntityManager.getTransaction().commit();
+            newEntityManager.close();
+        }
     }
 
     @Override
@@ -102,5 +112,19 @@ public class DriverProfileServiceImpl implements DriverProfileService {
         entityManager.close();
 
         return updatedDriverProfile;
+    }
+
+
+    //To be deleted
+    public void dummy() throws IOException, InvalidFormatException {
+        File file = new File("/home/kostique/IdeaProjects/JPAPOI/user_report.xlsx");
+
+        EntityManager entityManager = PersistenceUtil.getEntityManager();
+        entityManager.getTransaction().begin();
+
+        create(file, entityManager);
+
+        entityManager.getTransaction().commit();
+        entityManager.close();
     }
 }

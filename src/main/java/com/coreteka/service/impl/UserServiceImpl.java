@@ -20,13 +20,6 @@ public class UserServiceImpl implements UserService {
         UserDAO userDAO = new UserDAOImpl();
         EntityManager newEntityManager;
 
-        AuthoritiesService authoritiesService = new AuthoritiesServiceImpl();
-        Authorities authority = authoritiesService.getByName(role);
-        Set<Authorities> authoritiesSet = new HashSet<>();
-        authoritiesSet.add(authority);
-
-        user.setAuthorities(authoritiesSet);
-
         if (entityManager == null || !entityManager.getTransaction().isActive()) {
             newEntityManager = PersistenceUtil.getEntityManager();
             newEntityManager.getTransaction().begin();
@@ -35,6 +28,12 @@ public class UserServiceImpl implements UserService {
 
             newEntityManager = entityManager;
         }
+
+        AuthoritiesService authoritiesService = new AuthoritiesServiceImpl();
+
+        Set<Authorities> authoritiesSet = authoritiesService.getByName(role, newEntityManager);
+
+        user.setAuthorities(authoritiesSet);
 
         user = userDAO.create(user, newEntityManager);
 

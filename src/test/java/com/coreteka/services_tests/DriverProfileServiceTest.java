@@ -19,7 +19,7 @@ public class DriverProfileServiceTest {
     public void createDriverProfile() {
         DriverProfileService driverProfileService = new DriverProfileServiceImpl();
 
-        //Get token for all new driverProfile properties to have unique properties
+        //Get token for all new driverProfile properties to have unique values
         long token = System.currentTimeMillis();
 
         //Create user for new driverProfile
@@ -46,7 +46,7 @@ public class DriverProfileServiceTest {
 
         DriverProfileService driverProfileService = new DriverProfileServiceImpl();
 
-        driverProfileService.create(file);
+        driverProfileService.create(file, null);
 
     }
 
@@ -80,5 +80,12 @@ public class DriverProfileServiceTest {
         driverProfile = driverProfileService.update(driverProfile);
         assertThat(driverProfile.getFullName(), equalTo(newDriverProfileFullName));
         assertThat(driverProfile.getPhone(), equalTo(newDriverProfilePhone));
+    }
+
+    //To be deleted
+    @Test
+    public void envokeCreateMethodeFromInsideOfDriverProfileService() throws IOException, InvalidFormatException {
+        DriverProfileService driverProfileService = new DriverProfileServiceImpl();
+        ((DriverProfileServiceImpl) driverProfileService).dummy();
     }
 }

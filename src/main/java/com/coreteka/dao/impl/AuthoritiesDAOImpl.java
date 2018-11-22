@@ -18,18 +18,9 @@ public class AuthoritiesDAOImpl implements AuthoritiesDAO {
     }
 
     @Override
-    public Authorities getByName(String name) {
-        EntityManager entityManager = PersistenceUtil.getEntityManager();
+    public Authorities getByName(String name, EntityManager entityManager) {
         Authorities authorities = entityManager.find(Authorities.class, name);
         return authorities;
-    }
-
-    @Override
-    public List<Authorities> getAuthoritiesList() {
-        EntityManager entityManager = PersistenceUtil.getEntityManager();
-        TypedQuery<Authorities> query = entityManager.createQuery("Select a FROM Authorities a", Authorities.class);
-        List<Authorities> authoritiesList = query.getResultList();
-        return authoritiesList;
     }
 
     @Override

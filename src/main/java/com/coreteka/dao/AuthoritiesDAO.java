@@ -10,10 +10,8 @@ public interface AuthoritiesDAO {
     //create
     Authorities create(Authorities authorities);
 
-    //read
-    List<Authorities> getAuthoritiesList();
 
-    Authorities getByName(String name);
+    Authorities getByName(String name, EntityManager entityManager);
 
     //update
     Authorities update(String name);
