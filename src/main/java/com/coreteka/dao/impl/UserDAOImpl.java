@@ -24,7 +24,7 @@ public class UserDAOImpl implements UserDAO {
     }
 
     @Override
-    public User getByUserName(String username, EntityManager entityManager){
+    public User getByUsername(String username, EntityManager entityManager){
         TypedQuery<User> query = entityManager.
                 createQuery("SELECT u FROM User u WHERE u.username = :username", User.class);
         return query.setParameter("username", username).getSingleResult();

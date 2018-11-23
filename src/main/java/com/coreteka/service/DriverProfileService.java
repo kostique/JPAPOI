@@ -12,9 +12,9 @@ public interface DriverProfileService {
 
         DriverProfile create(DriverProfile driverProfile, EntityManager entityManager);
 
-        DriverProfile getById(long id);
+        DriverProfile getById(long id, EntityManager entityManager);
 
-        DriverProfile update(DriverProfile driverProfile);
+        DriverProfile update(DriverProfile driverProfile, EntityManager entityManager);
 
         void create(File file, EntityManager entityManager) throws IOException, InvalidFormatException;
 }

@@ -12,7 +12,7 @@ public interface UserDAO {
 
     User getById(long id);
 
-    User getByUserName(String username, EntityManager entityManager);
+    User getByUsername(String username, EntityManager entityManager);
 
     //update
     User update(User user);

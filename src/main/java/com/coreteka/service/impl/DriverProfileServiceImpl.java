@@ -79,52 +79,79 @@ public class DriverProfileServiceImpl implements DriverProfileService {
     }
 
     @Override
-    public DriverProfile getById(long id) {
+    public DriverProfile getById(long id, EntityManager entityManager) {
         DriverProfileDAO driverProfileDAO = new DriverProfileDAOImpl();
-        DriverProfile driverProfile = driverProfileDAO.getById(id);
+
+        EntityManager newEntityManager;
+
+        if (entityManager == null || !entityManager.getTransaction().isActive()) {
+            newEntityManager = PersistenceUtil.getEntityManager();
+            newEntityManager.getTransaction().begin();
+
+        } else {
+
+            newEntityManager = entityManager;
+        }
+
+        DriverProfile driverProfile = driverProfileDAO.getById(id, newEntityManager);
+
+        if (entityManager == null) {
+            newEntityManager.getTransaction().commit();
+            newEntityManager.close();
+        }
+
         return driverProfile;
     }
 
     @Override
-    public DriverProfile update(DriverProfile driverProfile) {
-        UserDAO userDAO = new UserDAOImpl();
+    public DriverProfile update(DriverProfile driverProfile, EntityManager entityManager) {
         String userName = driverProfile.getUser().getUsername();
 
-        EntityManager entityManager = PersistenceUtil.getEntityManager();
-        entityManager.getTransaction().begin();
+        EntityManager newEntityManager;
 
-        User existingUser = userDAO.getByUserName(userName, entityManager);
+        if (entityManager == null || !entityManager.getTransaction().isActive()) {
+            newEntityManager = PersistenceUtil.getEntityManager();
+            newEntityManager.getTransaction().begin();
+
+        } else {
+
+            newEntityManager = entityManager;
+        }
+
+        UserService userService = new UserServiceImpl();
+        User existingUser = userService.getByUsername(userName, newEntityManager);
 
         if (null == existingUser) {
             throw new DriverProfileNotFoundException("Driver profile with user=" + userName + " not found.");
         }
 
-        DriverProfileDAO driverProfileDAO = new DriverProfileDAOImpl();
-
-        DriverProfile existingDriverProfile = driverProfileDAO.getById(existingUser.getDriverProfile().getId());
+        DriverProfile existingDriverProfile = getById(existingUser.getDriverProfile().getId(), newEntityManager);
 
         existingDriverProfile.setPhone(driverProfile.getPhone());
         existingDriverProfile.setFullName(driverProfile.getFullName());
 
-        DriverProfile updatedDriverProfile = driverProfileDAO.update(existingDriverProfile);
+        DriverProfileDAO driverProfileDAO = new DriverProfileDAOImpl();
+        DriverProfile updatedDriverProfile = driverProfileDAO.update(existingDriverProfile, newEntityManager);
 
-        entityManager.getTransaction().commit();
-        entityManager.close();
+        if (entityManager == null) {
+            newEntityManager.getTransaction().commit();
+            newEntityManager.close();
+        }
 
         return updatedDriverProfile;
     }
 
 
-    //To be deleted
-    public void dummy() throws IOException, InvalidFormatException {
-        File file = new File("/home/kostique/IdeaProjects/JPAPOI/user_report.xlsx");
-
-        EntityManager entityManager = PersistenceUtil.getEntityManager();
-        entityManager.getTransaction().begin();
-
-        create(file, entityManager);
-
-        entityManager.getTransaction().commit();
-        entityManager.close();
-    }
+//    //To be deleted
+//    public void dummy() throws IOException, InvalidFormatException {
+//        File file = new File("/home/kostique/IdeaProjects/JPAPOI/user_report.xlsx");
+//
+//        EntityManager entityManager = PersistenceUtil.getEntityManager();
+//        entityManager.getTransaction().begin();
+//
+//        create(file, entityManager);
+//
+//        entityManager.getTransaction().commit();
+//        entityManager.close();
+//    }
 }

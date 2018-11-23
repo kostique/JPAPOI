@@ -38,7 +38,6 @@ public class DriverProfileServiceTest {
     }
 
 
-
     @Test
     public void createDriverProfilesFromFile() throws IOException, InvalidFormatException {
 
@@ -57,7 +56,7 @@ public class DriverProfileServiceTest {
         long driverProfileId = 1L;
 
         DriverProfileService driverProfileService = new DriverProfileServiceImpl();
-        DriverProfile driverProfile = driverProfileService.getById(driverProfileId);
+        DriverProfile driverProfile = driverProfileService.getById(driverProfileId, null);
 
         assertThat(driverProfile.getId(), equalTo(1L));
     }
@@ -68,8 +67,8 @@ public class DriverProfileServiceTest {
         User user = new User();
         user.setUsername("Slavik");
 
-        String newDriverProfileFullName = "FUHRER";
-        String newDriverProfilePhone = "107";
+        String newDriverProfileFullName = "ST.FUHRER";
+        String newDriverProfilePhone = "101";
 
         DriverProfile driverProfile = new DriverProfile();
         driverProfile.setFullName(newDriverProfileFullName);
@@ -77,15 +76,17 @@ public class DriverProfileServiceTest {
         driverProfile.setUser(user);
 
         DriverProfileService driverProfileService = new DriverProfileServiceImpl();
-        driverProfile = driverProfileService.update(driverProfile);
+        driverProfile = driverProfileService.update(driverProfile, null);
         assertThat(driverProfile.getFullName(), equalTo(newDriverProfileFullName));
         assertThat(driverProfile.getPhone(), equalTo(newDriverProfilePhone));
     }
-
-    //To be deleted
-    @Test
-    public void envokeCreateMethodeFromInsideOfDriverProfileService() throws IOException, InvalidFormatException {
-        DriverProfileService driverProfileService = new DriverProfileServiceImpl();
-        ((DriverProfileServiceImpl) driverProfileService).dummy();
-    }
 }
+
+
+//    //To be deleted
+//    @Test
+//    public void envokeCreateDriverProfileMethodeFromInsideOfDriverProfileService() throws IOException, InvalidFormatException {
+//        DriverProfileService driverProfileService = new DriverProfileServiceImpl();
+//        ((DriverProfileServiceImpl) driverProfileService).dummy();
+//    }
+//

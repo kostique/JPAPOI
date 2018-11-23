@@ -16,15 +16,14 @@ import java.util.Set;
 
 public class UserServiceTest {
     
-    @Test
-    public void createUser(){
-
-        String token = String.valueOf(System.currentTimeMillis());
-        User user = new User();
-        user.setUsername("Fooks" + token);
-        user.setPassword("12345" + token);
-
-        UserService userService = new UserServiceImpl();
-        userService.create(user, "ROLE_USER", null);
-    }
+//    @Test
+//    public void updateUser(){
+//
+//        User user = new User();
+//        user.setUsername("Fooks" + token);
+//        user.setPassword("12345" + token);
+//
+//        UserService userService = new UserServiceImpl();
+//        userService.create(user, "ROLE_USER", null);
+//    }
 }

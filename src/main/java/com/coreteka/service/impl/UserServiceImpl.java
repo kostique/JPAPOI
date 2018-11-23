@@ -45,14 +45,6 @@ public class UserServiceImpl implements UserService {
         return user;
     }
 
-
-    @Override
-    public User getById(long id) {
-        UserDAO userDAO = new UserDAOImpl();
-        return userDAO.getById(id);
-    }
-
-
     @Override
     public User getByUsername(String username, EntityManager entityManager){
         UserDAO userDAO = new UserDAOImpl();
@@ -69,7 +61,7 @@ public class UserServiceImpl implements UserService {
             newEntityManager = entityManager;
         }
 
-        user = userDAO.getByUserName(username, newEntityManager);
+        user = userDAO.getByUsername(username, newEntityManager);
 
         if (entityManager == null) {
             newEntityManager.getTransaction().commit();

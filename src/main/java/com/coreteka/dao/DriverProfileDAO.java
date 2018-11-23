@@ -11,9 +11,9 @@ public interface DriverProfileDAO {
     DriverProfile create(DriverProfile driverProfile, EntityManager entityManager);
 
 
-    DriverProfile getById(long id);
+    DriverProfile getById(long id, EntityManager entityManager);
 
     //update
-    DriverProfile update(DriverProfile driverProfile);
+    DriverProfile update(DriverProfile driverProfile, EntityManager entityManager);
 
 }

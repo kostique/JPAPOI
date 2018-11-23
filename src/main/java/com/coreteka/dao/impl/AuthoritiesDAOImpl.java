@@ -3,24 +3,20 @@ package com.coreteka.dao.impl;
 import com.coreteka.dao.AuthoritiesDAO;
 import com.coreteka.entities.Authorities;
 import com.coreteka.util.PersistenceUtil;
-
 import javax.persistence.EntityManager;
-import javax.persistence.TypedQuery;
-import java.util.List;
+
 
 public class AuthoritiesDAOImpl implements AuthoritiesDAO {
 
     @Override
     public Authorities create(Authorities authorities) {
         EntityManager entityManager = PersistenceUtil.getEntityManager();
-        Authorities createdAuthorities = entityManager.merge(authorities);
-        return createdAuthorities;
+        return entityManager.merge(authorities);
     }
 
     @Override
     public Authorities getByName(String name, EntityManager entityManager) {
-        Authorities authorities = entityManager.find(Authorities.class, name);
-        return authorities;
+        return entityManager.find(Authorities.class, name);
     }
 
     @Override

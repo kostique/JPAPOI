@@ -17,17 +17,14 @@ public class DriverProfileDAOImpl implements DriverProfileDAO {
     }
 
     @Override
-    public DriverProfile getById(long id) {
-        EntityManager entityManager = PersistenceUtil.getEntityManager();
+    public DriverProfile getById(long id, EntityManager entityManager) {
         DriverProfile driverProfile = entityManager.find(DriverProfile.class, id);
         return driverProfile;
     }
 
     @Override
-    public DriverProfile update(DriverProfile driverProfile) {
-        EntityManager entityManager = PersistenceUtil.getEntityManager();
+    public DriverProfile update(DriverProfile driverProfile, EntityManager entityManager) {
         DriverProfile updatedDriverProfile = entityManager.merge(driverProfile);
         return updatedDriverProfile;
-
     }
 }
